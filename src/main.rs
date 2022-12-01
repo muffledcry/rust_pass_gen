@@ -2,20 +2,33 @@ use rand::{Rng, seq::SliceRandom};
 use rand::distributions::Distribution;
 use std::fmt::Display;
 use std::path::Path;
-use std::fs::File;
+use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
+use std::io::{stdin, stdout, Write};
 use serde::{Serialize, Deserialize};
 use clearscreen;
+use termion::input::TermRead;
+use termion::raw::IntoRawMode;
 
 
 fn main() {
   clearscreen::clear().expect("Clearing screen.");
-  let new_entry = Entry::builder().site_app().username().password().build();
-  println!("{}", new_entry);
-  match load_entries() {
-    Some(entries) => println!("{:?}", entries),
-    None => println!("No previous entries found."),
-  };
+  loop {
+    let choice = menu();
+    match choice {
+      1 => {
+        let new_entry = Entry::builder().site_app().username().password().build();
+        Entries::write_new_entry(new_entry);       
+      },
+      2 => {},
+      3 => {
+        let entries = Entries::load_entries();
+        entries.show_all();
+      },
+      4 => {},
+      _ => {}
+    }
+  }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -23,6 +36,56 @@ struct Entries {
   list: Vec<Entry>,
 }
 
+impl Entries {
+  fn new() -> Entries {
+    Entries { 
+      list: Vec::new()
+    }
+  }
+  
+  fn show_all(self) {
+   for entry in self.list {
+     println!("{}", entry);
+     println!("");
+   }
+    pause();
+    clearscreen::clear().expect("Clearing screen.");
+  }
+  
+  fn load_entries() -> Entries {
+  let path = Path::new("./passwords.json");
+  let path_exists: bool = path.exists();
+  if path_exists == true {
+    let mut file = match File::open(&path) {
+      Ok(file) => file,
+      Err(why) => panic!("Couldn't read {}: {}", path.display(), why),
+    };
+    let mut contents = String::new();
+    match file.read_to_string(&mut contents) {
+      Ok(contents) => contents,
+      Err(why) => panic!("Couldn't read {}: {}", path.display(), why),
+    };
+    let entries: Entries = serde_json::from_str(&contents)
+      .expect("Parsing contents to JSON.");
+    entries
+  }else{
+    let entries = Entries::new();
+    entries
+  }
+}
+
+fn write_new_entry(new_entry: Entry) {
+  let path = Path::new("./passwords.json");
+  let mut entries = Entries::load_entries();
+  entries.list.push(new_entry);
+  let file = OpenOptions::new()
+    .create(true)
+    .write(true)
+    .truncate(true)
+    .open(path).unwrap();
+  serde_json::to_writer(file, &entries).unwrap();
+  }
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Entry {
@@ -42,7 +105,6 @@ impl Display for Entry {
     write!(f, "Site/App: {}\n - Username: {}\n - Password: {}", self.site_app, self.username, self.password)
   }
 }
-
 
 struct EntryBuilder {
   site_app: String,
@@ -100,7 +162,6 @@ impl Default for EntryBuilder {
     }
 }
 
-
 struct MixedChars;
 
 impl Distribution<char> for MixedChars {
@@ -147,23 +208,24 @@ fn generate_password(password_length: u8) -> String {
   password
 }
 
-fn load_entries() -> Option<Entries> {
-  let path = Path::new("./passwords.json");
-  let path_exists: bool = path.exists();
-  if path_exists == true {
-    let mut file = match File::open(&path) {
-      Ok(file) => file,
-      Err(why) => panic!("Couldn't read {}: {}", path.display(), why),
-    };
-    let mut contents = String::new();
-    match file.read_to_string(&mut contents) {
-      Ok(contents) => contents,
-      Err(why) => panic!("Couldn't read {}: {}", path.display(), why),
-    };
-    let entries: Entries = serde_json::from_str(&contents)
-      .expect("Parsing contents to JSON.");
-    Some(entries)
-  }else{
-    None
-  }
+fn menu() -> i32 {
+  println!("MENU");
+  println!("What would you like to do?");
+  println!("- Enter 1 to make a password.");
+  println!("- Enter 2 to view a password.");
+  println!("- Enter 3 to view all passwords.");
+  println!("- Enter 4 to change a password.");
+  let mut choice = String::new();
+  std::io::stdin().read_line(&mut choice).expect("Reading line");
+
+  let choice: i32 = choice.trim().parse().expect("Could not convert");
+  clearscreen::clear().expect("Clearing screen.");
+  choice
+}
+
+fn pause() {
+  let mut stdout = stdout().into_raw_mode().unwrap();
+  write!(stdout, "Press any key to continue...\r\n").unwrap();
+  stdout.flush().unwrap();
+  stdin().keys().next();
 }
