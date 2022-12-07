@@ -1,0 +1,10 @@
+/data/data/com.termux/files/home/storage/Rust/rust_pass_gen/target/debug/deps/which-ca72e82af9480064.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/checker.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/error.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/finder.rs
+
+/data/data/com.termux/files/home/storage/Rust/rust_pass_gen/target/debug/deps/libwhich-ca72e82af9480064.rlib: /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/checker.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/error.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/finder.rs
+
+/data/data/com.termux/files/home/storage/Rust/rust_pass_gen/target/debug/deps/which-ca72e82af9480064.d: /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/checker.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/error.rs /data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/finder.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/checker.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/error.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/github.com-1ecc6299db9ec823/which-4.3.0/src/finder.rs:
